@@ -21,7 +21,7 @@ function App() {
       const data = bustimeResponse.vehicle;
       setBuses(data);
     } catch (error) {
-      console.error('Error fetching vehicles:', error);
+      setBuses([]);
     }
   };
 
@@ -34,13 +34,17 @@ function App() {
     <>
       <h1>CTA Bus Tracker</h1>
       <h2>Route #6</h2>
-      <ul>
-        {buses.map((bus) => (
-          <li key={bus.vid}>
-            Bus #{bus.vid} is at {bus.lat}, {bus.lon}
-          </li>
-        ))}
-      </ul>
+      {buses.length === 0 ? (
+        <p>No buses found</p>
+      ) : (
+        <ul>
+          {buses.map((bus) => (
+            <li key={bus.vid}>
+              Bus #{bus.vid} is at {bus.lat}, {bus.lon}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }
