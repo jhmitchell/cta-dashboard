@@ -1,12 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 
 function App() {
   const [buses, setBuses] = useState([]);
+  const [routes, setRoutes] = useState([]);
+  const port = 5000;
+  const route = 6;
+
+  const fetchRoutes = async () => {
+    const url = `http://localhost:${port}/api/getroutes`;
+
+    try {
+      const response = await axios.get(url);
+      const bustimeResponse = response.data['bustime-response'];
+
+      if (bustimeResponse.error) {
+        throw new Error(bustimeResponse.error[0].msg);
+      }
+
+      const data = bustimeResponse.routes;
+      setRoutes(data);
+    } catch (error) {
+      setRoutes([]);
+    }
+  };
 
   const fetchBuses = async () => {
-    console.log('fetching buses')
-    const url = 'http://localhost:5000/api/getvehicles';
+    const url = `http://localhost:${port}/api/getvehicles?route=${route}`;
 
     try {
       const response = await axios.get(url);
@@ -26,25 +47,46 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('mounting fetchbuses')
     fetchBuses();
+  }, []);
+
+  useEffect(() => {
+    fetchRoutes();
   }, []);
 
   return (
     <>
-      <h1>CTA Bus Tracker</h1>
-      <h2>Route #6</h2>
-      {buses.length === 0 ? (
-        <p>No buses found</p>
-      ) : (
+    <h1>CTA Bus Tracker</h1>
+    <div className="page">
+      <div className="column">
+        <h2>Routes</h2>
+        {routes.length === 0 ? (
+          <p>No routes found</p>
+        ) : (
         <ul>
-          {buses.map((bus) => (
-            <li key={bus.vid}>
-              Bus #{bus.vid} is at {bus.lat}, {bus.lon}
-            </li>
+          {routes.map((route) => (
+            <li key={route.rt}>{route.rt} - {route.rtnm}</li>
           ))}
         </ul>
-      )}
+        )}
+      </div>
+
+      <div className="column">
+        <h2>Route #{route}</h2>
+        {buses.length === 0 ? (
+          <p>No buses found</p>
+        ) : (
+          <ul>
+            {buses.map((bus) => (
+              <li key={bus.vid}>
+                Bus #{bus.vid} is at {bus.lat}, {bus.lon}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+    </div>
     </>
   );
 }
