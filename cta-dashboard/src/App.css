@@ -1,0 +1,18 @@
+.nav {
+	width: var(--nav-width);
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: grey;
+	overflow: auto;
+	font-family: 'Comme', sans-serif;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.content {
+	width: calc(100% - var(--nav-width));
+	margin-left: calc(var(--nav-width) + 2em);
+	margin-right: 2em;
+	overflow: auto;
+}

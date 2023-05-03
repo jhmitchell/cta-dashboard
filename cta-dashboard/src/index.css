@@ -1,0 +1,22 @@
+:root {
+	--nav-width: 240px;
+}
+
+body {
+	height: 100vh;
+	margin: 0 auto;
+	width: 100vw;
+}
+
+#root {
+	height: 100%;
+	display: flex;
+	overflow: hidden;
+}
+
+.hidden {
+	position: absolute;
+	top: -999px;
+	left: -999px;
+	visibility: hidden;
+}
